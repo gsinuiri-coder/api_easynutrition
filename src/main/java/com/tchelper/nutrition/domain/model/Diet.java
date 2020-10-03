@@ -1,10 +1,11 @@
-package com.tchelper.EasyNutrition.domain.model;
+package com.tchelper.nutrition.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name="diets")
@@ -24,6 +25,7 @@ public class Diet extends AuditModel{
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "session_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Session session;
 

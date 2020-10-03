@@ -1,4 +1,4 @@
-package com.tchelper.EasyNutrition.domain.model;
+package com.tchelper.nutrition.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.CreatedDate;

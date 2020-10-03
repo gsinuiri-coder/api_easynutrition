@@ -1,4 +1,4 @@
-package com.tchelper.EasyNutrition;
+package com.tchelper.nutrition;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
