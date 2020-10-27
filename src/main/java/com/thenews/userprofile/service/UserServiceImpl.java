@@ -1,9 +1,9 @@
-package com.thenews.nutrition.service;
+package com.thenews.userprofile.service;
 
-import com.thenews.nutrition.domain.model.User;
-import com.thenews.nutrition.domain.repository.UserRepository;
-import com.thenews.nutrition.domain.service.UserService;
-import com.thenews.nutrition.exception.ResourceNotFoundException;
+import com.thenews.userprofile.domain.model.User;
+import com.thenews.userprofile.domain.repository.UserRepository;
+import com.thenews.userprofile.domain.service.UserService;
+import com.thenews.common.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

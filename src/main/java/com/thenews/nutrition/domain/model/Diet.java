@@ -2,6 +2,7 @@ package com.thenews.nutrition.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
+import com.thenews.common.domain.model.AuditModel;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -9,7 +10,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="diets")
-public class Diet extends AuditModel{
+public class Diet extends AuditModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -2,6 +2,8 @@ package com.thenews.nutrition.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
+import com.thenews.common.domain.model.AuditModel;
+import com.thenews.userprofile.domain.model.User;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 

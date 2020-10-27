@@ -1,4 +1,4 @@
-package com.thenews.nutrition.domain.model;
+package com.thenews.common.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.CreatedDate;

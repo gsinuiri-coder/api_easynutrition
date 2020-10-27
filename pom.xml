@@ -15,7 +15,7 @@
 	<description>EasyNutrition Applicaction Implemented with Spring Boot</description>
 
 	<properties>
-		<java.version>11</java.version>
+		<java.version>14</java.version>
 	</properties>
 
 	<dependencies>
@@ -61,6 +61,13 @@
 			<version>1.4.8</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-data-rest -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-data-rest</artifactId>
+			<version>1.4.8</version>
+		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/org.modelmapper/modelmapper -->
 		<dependency>
 			<groupId>org.modelmapper</groupId>
@@ -80,6 +87,8 @@
 			<version>1.4.200</version>
 			<scope>test</scope>
 		</dependency>
+
+
 
 	</dependencies>
 

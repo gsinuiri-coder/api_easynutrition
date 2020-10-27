@@ -3,7 +3,7 @@ package com.thenews.nutrition.service;
 import com.thenews.nutrition.domain.model.Diet;
 import com.thenews.nutrition.domain.repository.DietRepository;
 import com.thenews.nutrition.domain.service.DietService;
-import com.thenews.nutrition.exception.ResourceNotFoundException;
+import com.thenews.common.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

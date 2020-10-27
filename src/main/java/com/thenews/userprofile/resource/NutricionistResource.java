@@ -1,36 +1,42 @@
-package com.thenews.nutrition.resource;
+package com.thenews.userprofile.resource;
 
-import com.thenews.nutrition.domain.model.AuditModel;
+import com.thenews.userprofile.domain.model.User;
 
-public class UserResource extends AuditModel {
+public class NutricionistResource extends User {
 
     private Long id;
     private String name;
     private String lastName;
 
+    @Override
     public Long getId() {
         return id;
     }
 
-    public UserResource setId(Long id) {
+    @Override
+    public NutricionistResource setId(Long id) {
         this.id = id;
         return this;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
-    public UserResource setName(String name) {
+    @Override
+    public NutricionistResource setName(String name) {
         this.name = name;
         return this;
     }
 
+    @Override
     public String getLastName() {
         return lastName;
     }
 
-    public UserResource setLastName(String lastName) {
+    @Override
+    public NutricionistResource setLastName(String lastName) {
         this.lastName = lastName;
         return this;
     }

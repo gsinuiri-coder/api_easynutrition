@@ -1,6 +1,6 @@
 package com.thenews.nutrition.resource;
 
-import com.thenews.nutrition.domain.model.AuditModel;
+import com.thenews.common.domain.model.AuditModel;
 
 public class SessionResource extends AuditModel {
 

@@ -1,6 +1,6 @@
-package com.thenews.nutrition.domain.service;
+package com.thenews.userprofile.domain.service;
 
-import com.thenews.nutrition.domain.model.User;
+import com.thenews.userprofile.domain.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;

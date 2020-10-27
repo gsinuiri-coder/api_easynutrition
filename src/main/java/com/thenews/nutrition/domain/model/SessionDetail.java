@@ -1,6 +1,7 @@
 package com.thenews.nutrition.domain.model;
 
 import com.sun.istack.NotNull;
+import com.thenews.common.domain.model.AuditModel;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;

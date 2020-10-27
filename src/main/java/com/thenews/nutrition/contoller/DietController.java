@@ -1,4 +1,4 @@
-package com.thenews.nutrition.Contoller;
+package com.thenews.nutrition.contoller;
 
 import com.thenews.nutrition.domain.model.Diet;
 import com.thenews.nutrition.domain.service.DietService;

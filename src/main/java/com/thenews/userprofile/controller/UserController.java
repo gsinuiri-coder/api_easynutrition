@@ -1,10 +1,10 @@
-package com.thenews.nutrition.Contoller;
+package com.thenews.userprofile.controller;
 
 
-import com.thenews.nutrition.domain.model.User;
-import com.thenews.nutrition.domain.service.UserService;
-import com.thenews.nutrition.resource.SaveUserResource;
-import com.thenews.nutrition.resource.UserResource;
+import com.thenews.userprofile.domain.model.User;
+import com.thenews.userprofile.domain.service.UserService;
+import com.thenews.userprofile.resource.SaveUserResource;
+import com.thenews.userprofile.resource.UserResource;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
