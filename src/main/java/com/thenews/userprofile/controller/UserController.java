@@ -18,7 +18,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Tag(name="users", description = "User API")
+@Tag(name="Users", description = "User API")
 @RestController
 @RequestMapping("/api")
 public class UserController {

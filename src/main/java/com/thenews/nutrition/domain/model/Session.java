@@ -18,7 +18,6 @@ public class Session extends AuditModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @Column(unique = true)
     @NotNull
     private Date start_at;
 

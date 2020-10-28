@@ -17,7 +17,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Tag(name="sessions", description = "Sessions API")
+@Tag(name="Sessions", description = "Sessions API")
 @RestController
 @RequestMapping("/api")
 public class SessionController {

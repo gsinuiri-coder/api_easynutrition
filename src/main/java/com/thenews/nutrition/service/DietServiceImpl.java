@@ -4,6 +4,7 @@ import com.thenews.nutrition.domain.model.Diet;
 import com.thenews.nutrition.domain.repository.DietRepository;
 import com.thenews.nutrition.domain.service.DietService;
 import com.thenews.common.exception.ResourceNotFoundException;
+import com.thenews.userprofile.domain.repository.NutricionistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,48 +17,49 @@ public class DietServiceImpl implements DietService {
     @Autowired
     private DietRepository dietRepository;
 
+    @Autowired
+    private NutricionistRepository nutricionistRepository;
+
     @Override
-    public Page<Diet> getAllDiets(Pageable pageable) {
-        return dietRepository.findAll(pageable);
+    public Page<Diet> getAllDietsByNutricionistId(Long nutricionistId, Pageable pageable) {
+        return dietRepository.findByNutricionistId(nutricionistId, pageable);
     }
 
     @Override
-    public Diet getDietById(Long dietId) {
-        return dietRepository.findById(dietId)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Diet", "Id", dietId));
-    }
-
-    @Override
-    public Diet getDietByIdAndSessionId(Long postId, Long dietId) {
-        return dietRepository.findByIdAndSessionId(dietId, postId)
+    public Diet getDietByIdAndNutricionistId(Long nutricionistId, Long dietId) {
+        return dietRepository.findByIdAndNutricionistId(dietId, nutricionistId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Diet not found with Id " + dietId +
-                                " and SessionId " + postId));
-    }
-    
-    @Override
-    public Diet createDiet(Diet diet) {
-        return dietRepository.save(diet);
+                                " and NutricionistId " + nutricionistId));
     }
 
     @Override
-    public Diet updateDiet(Long dietId, Diet dietRequest) {
-        Diet diet = dietRepository.findById(dietId)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Diet", "Id", dietId));
-        return dietRepository.save(
-                diet.setTitle(dietRequest.getTitle())
-                        .setDescription(dietRequest.getDescription())
-                        );
+    public Diet createDiet(Long nutricionistId, Diet diet) {
+        return nutricionistRepository.findById(nutricionistId).map(nutricionist -> {
+            diet.setNutricionist(nutricionist);
+            return dietRepository.save(diet);
+        }).orElseThrow(() -> new ResourceNotFoundException(
+                "Nutricionist", "Id", nutricionistId));
     }
 
     @Override
-    public ResponseEntity<?> deleteDiet(Long dietId) {
-        Diet diet = dietRepository.findById(dietId)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Diet", "Id", dietId));
-        dietRepository.delete(diet);
-        return ResponseEntity.ok().build();
+    public Diet updateDiet(Long nutricionistId, Long dietId, Diet dietDetails) {
+        if(!nutricionistRepository.existsById(nutricionistId))
+            throw new ResourceNotFoundException("Nutricionist", "Id", nutricionistId);
+
+        return dietRepository.findById(dietId).map(diet -> {
+            diet.setTitle(dietDetails.getTitle());
+            diet.setDescription(dietDetails.getDescription());
+            return dietRepository.save(diet);
+        }).orElseThrow(() -> new ResourceNotFoundException("Diet", "Id", dietId));
+    }
+
+    @Override
+    public ResponseEntity<?> deleteDiet(Long nutricionistId, Long dietId) {
+        return dietRepository.findByIdAndNutricionistId(dietId, nutricionistId).map(diet -> {
+            dietRepository.delete(diet);
+            return ResponseEntity.ok().build();
+        }).orElseThrow(() -> new ResourceNotFoundException(
+                "Diet not found with Id " + dietId + " and NutricionistId " + nutricionistId));
     }
 }

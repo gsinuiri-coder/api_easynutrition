@@ -6,11 +6,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 public interface DietService {
-    Page<Diet> getAllDiets(Pageable pageable);
-    Diet getDietById(Long dietId);
-    Diet getDietByIdAndSessionId(Long sessionId, Long dietId);
-
-    Diet createDiet(Diet diet);
-    Diet updateDiet(Long dietId, Diet dietRequest);
-    ResponseEntity<?> deleteDiet(Long dietId);
+    Page<Diet> getAllDietsByNutricionistId(Long nutricionistId, Pageable pageable);
+    Diet getDietByIdAndNutricionistId(Long nutricionistId, Long dietId);
+    Diet createDiet(Long nutricionistId, Diet diet);
+    Diet updateDiet(Long nutricionistId, Long dietId, Diet dietDetails);
+    ResponseEntity<?> deleteDiet(Long nutricionistId, Long dietId);
 }

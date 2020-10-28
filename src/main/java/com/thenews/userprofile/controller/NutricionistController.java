@@ -18,7 +18,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Tag(name="nutricionists", description = "Nutricionist API")
+@Tag(name="Nutricionists", description = "Nutricionist API")
 @RestController
 @RequestMapping("/api")
 public class NutricionistController {
