@@ -1,10 +1,10 @@
 package com.thenews.nutrition.service;
 
-import com.thenews.nutrition.domain.model.Session;
-import com.thenews.nutrition.domain.repository.AdviceRepository;
-import com.thenews.nutrition.domain.repository.SessionRepository;
-import com.thenews.nutrition.domain.service.SessionService;
 import com.thenews.common.exception.ResourceNotFoundException;
+import com.thenews.nutrition.domain.model.Progress;
+import com.thenews.nutrition.domain.repository.AdviceRepository;
+import com.thenews.nutrition.domain.repository.ProgressRepository;
+import com.thenews.nutrition.domain.service.ProgressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,29 +12,29 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SessionServiceImpl implements SessionService {
+public class ProgressServiceImpl implements ProgressService {
 
     @Autowired
-    private SessionRepository sessionRepository;
+    private ProgressRepository sessionRepository;
 
     @Autowired
     private AdviceRepository adviceRepository;
 
     @Override
-    public Page<Session> getAllSessionsByAdviceId(Long adviceId, Pageable pageable) {
+    public Page<Progress> getAllProgresssByAdviceId(Long adviceId, Pageable pageable) {
         return sessionRepository.findByAdviceId(adviceId, pageable);
     }
 
     @Override
-    public Session getSessionByIdAndAdviceId(Long adviceId, Long sessionId) {
+    public Progress getProgressByIdAndAdviceId(Long adviceId, Long sessionId) {
         return sessionRepository.findByIdAndAdviceId(sessionId, adviceId)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Session not found with Id " + sessionId +
+                        "Progress not found with Id " + sessionId +
                                 " and AdviceId " + adviceId));
     }
 
     @Override
-    public Session createSession(Long adviceId, Session session) {
+    public Progress createProgress(Long adviceId, Progress session) {
         return adviceRepository.findById(adviceId).map(advice -> {
             session.setAdvice(advice);
             return sessionRepository.save(session);
@@ -43,23 +43,23 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public Session updateSession(Long adviceId, Long sessionId, Session sessionDetails) {
+    public Progress updateProgress(Long adviceId, Long sessionId, Progress sessionDetails) {
         if(!adviceRepository.existsById(adviceId))
             throw new ResourceNotFoundException("Advice", "Id", adviceId);
 
         return sessionRepository.findById(sessionId).map(session -> {
-            session.setStartAt(sessionDetails.getStartAt());
-            session.setLink(sessionDetails.getLink());
+            session.setWeight(sessionDetails.getWeight());
+            session.setDescription(sessionDetails.getDescription());
             return sessionRepository.save(session);
-        }).orElseThrow(() -> new ResourceNotFoundException("Session", "Id", sessionId));
+        }).orElseThrow(() -> new ResourceNotFoundException("Progress", "Id", sessionId));
     }
 
     @Override
-    public ResponseEntity<?> deleteSession(Long adviceId, Long sessionId) {
+    public ResponseEntity<?> deleteProgress(Long adviceId, Long sessionId) {
         return sessionRepository.findByIdAndAdviceId(sessionId, adviceId).map(session -> {
             sessionRepository.delete(session);
             return ResponseEntity.ok().build();
         }).orElseThrow(() -> new ResourceNotFoundException(
-                "Session not found with Id " + sessionId + " and AdviceId " + adviceId));
+                "Progress not found with Id " + sessionId + " and AdviceId " + adviceId));
     }
 }

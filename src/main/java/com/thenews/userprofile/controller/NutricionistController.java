@@ -5,6 +5,9 @@ import com.thenews.userprofile.domain.model.Nutricionist;
 import com.thenews.userprofile.domain.service.NutricionistService;
 import com.thenews.userprofile.resource.NutricionistResource;
 import com.thenews.userprofile.resource.SaveNutricionistResource;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +21,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Tag(name="nutricionists", description = "Nutricionist API")
+@Tag(name="Nutricionists", description = "Nutricionist API")
 @RestController
 @RequestMapping("/api")
 public class NutricionistController {
@@ -29,6 +32,12 @@ public class NutricionistController {
     @Autowired
     private NutricionistService nutricionistService;
 
+    @Operation(summary = "Get All Nutricionists", description = "Get All available Nutricionists", responses = {
+            @ApiResponse(
+                    description = "All Nutricionists",
+                    responseCode = "200",
+                    content = @Content(mediaType = "application/json"))
+    })
     @GetMapping("/nutricionists")
     public Page<NutricionistResource> getAllNutricionists(Pageable pageable) {
 

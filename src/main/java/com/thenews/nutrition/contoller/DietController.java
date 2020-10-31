@@ -4,6 +4,9 @@ import com.thenews.nutrition.domain.model.Diet;
 import com.thenews.nutrition.domain.service.DietService;
 import com.thenews.nutrition.resource.SaveDietResource;
 import com.thenews.nutrition.resource.DietResource;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +20,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Tag(name="sessions", description = "Sessions API")
+@Tag(name="Diets", description = "Diets API")
 @RestController
 @RequestMapping("/api")
 public class DietController {
@@ -28,48 +31,51 @@ public class DietController {
     @Autowired
     private ModelMapper mapper;
 
-    @GetMapping("/diets")
-    public Page<DietResource> getAllDiets(Pageable pageable) {
-
-        Page<Diet> dietsPage = dietService.getAllDiets(pageable);
-        List<DietResource> resources = dietsPage.getContent()
-                .stream().map(this::convertToResource)
-                .collect(Collectors.toList());
+    @Operation(summary = "Get All Nutricionists", description = "Get All available Nutricionists", responses = {
+            @ApiResponse(
+                    description = "All Nutricionists",
+                    responseCode = "200",
+                    content = @Content(mediaType = "application/json"))
+    })
+    @GetMapping("/nutricionists/{nutricionistId}/diets")
+    public Page<DietResource> getAllDietsByPostId(
+            @PathVariable (value = "nutricionistId") Long nutricionistId,
+            Pageable pageable) {
+        Page<Diet> dietPage = dietService.getAllDietsByNutricionistId(nutricionistId, pageable);
+        List<DietResource> resources = dietPage.getContent().stream()
+                .map(this::convertToResource).collect(Collectors.toList());
         return new PageImpl<>(resources, pageable, resources.size());
     }
 
-    @GetMapping("/sessions/{sessionId}/diets/{dietId}")
+    @GetMapping("/nutricionists/{nutricionistId}/diets/{dietId}")
     public DietResource getDietByIdAndPostId(
-            @PathVariable(name = "sessionId") Long postId,
+            @PathVariable(name = "nutricionistId") Long nutricionistId,
             @PathVariable(name = "dietId") Long dietId) {
-        return convertToResource(dietService.getDietByIdAndSessionId(postId, dietId));
+        return convertToResource(dietService.getDietByIdAndNutricionistId(nutricionistId, dietId));
     }
 
-
-    @GetMapping("/diets/{dietId}")
-    public DietResource getDietById(@PathVariable (value = "dietId") Long dietId) {
-        return convertToResource(dietService.getDietById(dietId));
-    }
-
-    @PostMapping("/diets")
+    @PostMapping("/nutricionists/{nutricionistId}/diets")
     public DietResource createDiet(
+            @PathVariable(value = "nutricionistId") Long nutricionistId,
             @Valid @RequestBody SaveDietResource resource) {
-        Diet diet = convertToEntity(resource);
-        return convertToResource(dietService.createDiet(diet));
-
+        return convertToResource(dietService.createDiet(nutricionistId,
+                convertToEntity(resource)));
     }
 
-    @PutMapping("/diets/{dietId}")
-    public DietResource updateDiet(@PathVariable Long dietId,
-                                         @Valid @RequestBody SaveDietResource resource) {
-        Diet diet = convertToEntity(resource);
-        return convertToResource(
-                dietService.updateDiet(dietId, diet));
+    @PutMapping("/nutricionists/{nutricionistId}/diets/{dietId}")
+    public DietResource updateDiet(
+            @PathVariable (value = "nutricionistId") Long nutricionistId,
+            @PathVariable (value = "dietId") Long dietId,
+            @Valid @RequestBody SaveDietResource resource) {
+        return convertToResource(dietService.updateDiet(nutricionistId, dietId,
+                convertToEntity(resource)));
     }
 
-    @DeleteMapping("/diets/{dietId}")
-    public ResponseEntity<?> deleteDiet(@PathVariable Long dietId) {
-        return dietService.deleteDiet(dietId);
+    @DeleteMapping("/nutricionists/{nutricionistId}/diets/{dietId}")
+    public ResponseEntity<?> deleteDiet(
+            @PathVariable (value = "nutricionistId") Long nutricionistId,
+            @PathVariable (value = "dietId") Long dietId) {
+        return dietService.deleteDiet(nutricionistId, dietId);
     }
 
     private Diet convertToEntity(SaveDietResource resource) {

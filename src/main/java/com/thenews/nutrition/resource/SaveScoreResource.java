@@ -1,26 +1,22 @@
 package com.thenews.nutrition.resource;
 
-import javax.persistence.Column;
 import javax.persistence.Lob;
 import javax.validation.constraints.NotNull;
 
-public class SaveDietResource {
-
-
-    @Column(unique = true)
-    @NotNull
-    private String title;
+public class SaveScoreResource {
 
     @NotNull
+    private Short star;
+
     @Lob
     private String description;
 
-    public String getTitle() {
-        return title;
+    public Short getStar() {
+        return star;
     }
 
-    public SaveDietResource setTitle(String title) {
-        this.title = title;
+    public SaveScoreResource setStar(Short star) {
+        this.star = star;
         return this;
     }
 
@@ -28,7 +24,7 @@ public class SaveDietResource {
         return description;
     }
 
-    public SaveDietResource setDescription(String description) {
+    public SaveScoreResource setDescription(String description) {
         this.description = description;
         return this;
     }

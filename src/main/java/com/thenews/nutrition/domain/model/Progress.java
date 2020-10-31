@@ -3,27 +3,25 @@ package com.thenews.nutrition.domain.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import com.thenews.common.domain.model.AuditModel;
-import com.thenews.userprofile.domain.model.User;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.List;
 
 @Entity
-@Table(name="sessions")
-public class Session extends AuditModel {
+@Table(name="progress")
+public class Progress extends AuditModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
-    private Date startAt;
+    private Double weight;
 
     @NotNull
-    private String link;
+    @Lob
+    private String description;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "advice_id", nullable = false)
@@ -36,26 +34,26 @@ public class Session extends AuditModel {
         return id;
     }
 
-    public Session setId(Long id) {
+    public Progress setId(Long id) {
         this.id = id;
         return this;
     }
 
-    public Date getStartAt() {
-        return startAt;
+    public Double getWeight() {
+        return weight;
     }
 
-    public Session setStartAt(Date startAt) {
-        this.startAt = startAt;
+    public Progress setWeight(Double weight) {
+        this.weight = weight;
         return this;
     }
 
-    public String getLink() {
-        return link;
+    public String getDescription() {
+        return description;
     }
 
-    public Session setLink(String link) {
-        this.link = link;
+    public Progress setDescription(String description) {
+        this.description = description;
         return this;
     }
 
@@ -63,7 +61,7 @@ public class Session extends AuditModel {
         return advice;
     }
 
-    public Session setAdvice(Advice advice) {
+    public Progress setAdvice(Advice advice) {
         this.advice = advice;
         return this;
     }
