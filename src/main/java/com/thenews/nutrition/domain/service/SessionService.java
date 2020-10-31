@@ -6,9 +6,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 public interface SessionService {
-    Page<Session> getAllSessions(Pageable pageable);
-    Session getSessionById(Long sessionId);
-    Session createSession(Session session);
-    Session updateSession(Long sessionId, Session sessionRequest);
-    ResponseEntity<?> deleteSession(Long sessionId);
+    Page<Session> getAllSessionsByAdviceId(Long adviceId, Pageable pageable);
+    Session getSessionByIdAndAdviceId(Long adviceId, Long sessionId);
+    Session createSession(Long adviceId, Session session);
+    Session updateSession(Long adviceId, Long sessionId, Session sessionDetails);
+    ResponseEntity<?> deleteSession(Long adviceId, Long sessionId);
 }

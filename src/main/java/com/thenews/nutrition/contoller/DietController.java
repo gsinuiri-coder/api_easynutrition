@@ -4,6 +4,9 @@ import com.thenews.nutrition.domain.model.Diet;
 import com.thenews.nutrition.domain.service.DietService;
 import com.thenews.nutrition.resource.SaveDietResource;
 import com.thenews.nutrition.resource.DietResource;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,12 @@ public class DietController {
     @Autowired
     private ModelMapper mapper;
 
+    @Operation(summary = "Get All Nutricionists", description = "Get All available Nutricionists", responses = {
+            @ApiResponse(
+                    description = "All Nutricionists",
+                    responseCode = "200",
+                    content = @Content(mediaType = "application/json"))
+    })
     @GetMapping("/nutricionists/{nutricionistId}/diets")
     public Page<DietResource> getAllDietsByPostId(
             @PathVariable (value = "nutricionistId") Long nutricionistId,

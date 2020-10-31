@@ -9,6 +9,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name="sessions")
@@ -19,19 +20,17 @@ public class Session extends AuditModel {
     private Long id;
 
     @NotNull
-    private Date start_at;
-
-    @NotNull
-    private Date end_at;
+    private Date startAt;
 
     @NotNull
     private String link;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "advice_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    private User user;
+    private Advice advice;
+
 
     public Long getId() {
         return id;
@@ -42,21 +41,12 @@ public class Session extends AuditModel {
         return this;
     }
 
-    public Date getStart_at() {
-        return start_at;
+    public Date getStartAt() {
+        return startAt;
     }
 
-    public Session setStart_at(Date start_at) {
-        this.start_at = start_at;
-        return this;
-    }
-
-    public Date getEnd_at() {
-        return end_at;
-    }
-
-    public Session setEnd_at(Date end_at) {
-        this.end_at = end_at;
+    public Session setStartAt(Date startAt) {
+        this.startAt = startAt;
         return this;
     }
 
@@ -69,12 +59,12 @@ public class Session extends AuditModel {
         return this;
     }
 
-    public User getUser() {
-        return user;
+    public Advice getAdvice() {
+        return advice;
     }
 
-    public Session setUser(User user) {
-        this.user = user;
+    public Session setAdvice(Advice advice) {
+        this.advice = advice;
         return this;
     }
 }

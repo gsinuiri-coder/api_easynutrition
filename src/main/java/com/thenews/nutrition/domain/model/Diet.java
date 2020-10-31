@@ -1,13 +1,14 @@
 package com.thenews.nutrition.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sun.istack.NotNull;
 import com.thenews.common.domain.model.AuditModel;
 import com.thenews.userprofile.domain.model.Nutricionist;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 @Table(name="diets")
@@ -30,6 +31,13 @@ public class Diet extends AuditModel {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Nutricionist nutricionist;
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            mappedBy = "diets")
+    @JsonIgnore
+    private List<Advice> advices;
+
 
     public Long getId() {
         return id;
@@ -64,6 +72,16 @@ public class Diet extends AuditModel {
 
     public Diet setNutricionist(Nutricionist nutricionist) {
         this.nutricionist = nutricionist;
+        return this;
+    }
+
+
+    public List<Advice> getAdvices() {
+        return advices;
+    }
+
+    public Diet setAdvices(List<Advice> advices) {
+        this.advices = advices;
         return this;
     }
 }

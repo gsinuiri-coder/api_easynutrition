@@ -1,13 +1,16 @@
 package com.thenews.nutrition.domain.service;
 
 import com.thenews.nutrition.domain.model.Progress;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 public interface ProgressService {
 
-    Progress getProgressByIdAndSessionId(Long sessionId, Long progressId);
-    Progress createProgress(Long sessionId, Progress progress);
-    Progress updateProgress(Long sessionId, Long progressId, Progress progressRequest);
-    ResponseEntity<?> deleteProgress(Long sessionId, Long progressId);
+    Page<Progress> getAllProgresssByAdviceId(Long adviceId, Pageable pageable);
+    Progress getProgressByIdAndAdviceId(Long adviceId, Long progressId);
+    Progress createProgress(Long adviceId, Progress progress);
+    Progress updateProgress(Long adviceId, Long progressId, Progress progressDetails);
+    ResponseEntity<?> deleteProgress(Long adviceId, Long progressId);
 
 }

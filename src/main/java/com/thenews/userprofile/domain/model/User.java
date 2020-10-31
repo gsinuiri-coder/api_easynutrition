@@ -1,12 +1,9 @@
 package com.thenews.userprofile.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sun.istack.NotNull;
 import com.thenews.common.domain.model.AuditModel;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
@@ -17,45 +14,45 @@ public class User extends AuditModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    protected Long id;
 
     @NotNull
     @Size(max = 80)
-    private String userName;
+    protected String userName;
 
     @NotNull
     @Size(max = 80)
-    private String password;
+    protected String password;
 
     @NotNull
     @Size(max = 100)
-    private String name;
+    protected String name;
 
     @NotNull
     @Size(max = 100)
-    private String lastName;
+    protected String lastName;
 
-    private Date birthday;
+    protected Date birthday;
 
     @Size(max = 150)
-    private String email;
+    protected String email;
 
     @Size(max = 12)
-    private String phone;
+    protected String phone;
 
     @Size(max = 100)
-    private String address;
+    protected String address;
 
-    private boolean active;
+    protected boolean active;
 
     @Size(max = 50)
-    private String linkedin;
+    protected String linkedin;
 
 //    @ManyToOne(fetch = FetchType.LAZY, optional = false)
 //    @JoinColumn(name = "rol_id", nullable = false)
 //    @OnDelete(action = OnDeleteAction.CASCADE)
 //    @JsonIgnore
-//    private Rol rol;
+//    protected Rol rol;
 
     public Long getId() {
         return id;

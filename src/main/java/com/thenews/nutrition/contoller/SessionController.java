@@ -4,6 +4,9 @@ import com.thenews.nutrition.domain.model.Session;
 import com.thenews.nutrition.domain.service.SessionService;
 import com.thenews.nutrition.resource.SaveSessionResource;
 import com.thenews.nutrition.resource.SessionResource;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,45 +26,56 @@ import java.util.stream.Collectors;
 public class SessionController {
 
     @Autowired
-    private ModelMapper mapper;
-
-    @Autowired
     private SessionService sessionService;
 
-    @GetMapping("/sessions")
-    public Page<SessionResource> getAllSessions(Pageable pageable) {
+    @Autowired
+    private ModelMapper mapper;
 
-        Page<Session> sessionsPage = sessionService.getAllSessions(pageable);
-        List<SessionResource> resources = sessionsPage.getContent()
-                .stream().map(this::convertToResource)
-                .collect(Collectors.toList());
+    @Operation(summary = "Get All Sessions", description = "Get All available Sessions", responses = {
+            @ApiResponse(
+                    description = "All Sessions",
+                    responseCode = "200",
+                    content = @Content(mediaType = "application/json"))
+    })
+    @GetMapping("/advices/{adviceId}/sessions")
+    public Page<SessionResource> getAllSessionsByAdviceId(
+            @PathVariable (value = "adviceId") Long adviceId,
+            Pageable pageable) {
+        Page<Session> sessionPage = sessionService.getAllSessionsByAdviceId(adviceId, pageable);
+        List<SessionResource> resources = sessionPage.getContent().stream()
+                .map(this::convertToResource).collect(Collectors.toList());
         return new PageImpl<>(resources, pageable, resources.size());
     }
 
-    @GetMapping("/sessions/{sessionId}")
-    public SessionResource getSessionById(@PathVariable (value = "sessionId") Long sessionId) {
-        return convertToResource(sessionService.getSessionById(sessionId));
+    @GetMapping("/advices/{adviceId}/sessions/{sessionId}")
+    public SessionResource getSessionByIdAndAdviceId(
+            @PathVariable(name = "adviceId") Long adviceId,
+            @PathVariable(name = "sessionId") Long sessionId) {
+        return convertToResource(sessionService.getSessionByIdAndAdviceId(adviceId, sessionId));
     }
 
-    @PostMapping("/sessions")
+    @PostMapping("/advices/{adviceId}/sessions")
     public SessionResource createSession(
+            @PathVariable(value = "adviceId") Long adviceId,
             @Valid @RequestBody SaveSessionResource resource) {
-        Session session = convertToEntity(resource);
-        return convertToResource(sessionService.createSession(session));
-
+        return convertToResource(sessionService.createSession(adviceId,
+                convertToEntity(resource)));
     }
 
-    @PutMapping("/sessions/{sessionId}")
-    public SessionResource updateSession(@PathVariable Long sessionId,
-                                   @Valid @RequestBody SaveSessionResource resource) {
-        Session session = convertToEntity(resource);
-        return convertToResource(
-                sessionService.updateSession(sessionId, session));
+    @PutMapping("/advices/{adviceId}/sessions/{sessionId}")
+    public SessionResource updateSession(
+            @PathVariable (value = "adviceId") Long adviceId,
+            @PathVariable (value = "sessionId") Long sessionId,
+            @Valid @RequestBody SaveSessionResource resource) {
+        return convertToResource(sessionService.updateSession(adviceId, sessionId,
+                convertToEntity(resource)));
     }
 
-    @DeleteMapping("/sessions/{sessionId}")
-    public ResponseEntity<?> deleteSession(@PathVariable Long sessionId) {
-        return sessionService.deleteSession(sessionId);
+    @DeleteMapping("/advices/{adviceId}/sessions/{sessionId}")
+    public ResponseEntity<?> deleteSession(
+            @PathVariable (value = "adviceId") Long adviceId,
+            @PathVariable (value = "sessionId") Long sessionId) {
+        return sessionService.deleteSession(adviceId, sessionId);
     }
 
     private Session convertToEntity(SaveSessionResource resource) {

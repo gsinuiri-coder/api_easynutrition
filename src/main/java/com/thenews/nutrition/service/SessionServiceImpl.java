@@ -1,6 +1,7 @@
 package com.thenews.nutrition.service;
 
 import com.thenews.nutrition.domain.model.Session;
+import com.thenews.nutrition.domain.repository.AdviceRepository;
 import com.thenews.nutrition.domain.repository.SessionRepository;
 import com.thenews.nutrition.domain.service.SessionService;
 import com.thenews.common.exception.ResourceNotFoundException;
@@ -16,39 +17,49 @@ public class SessionServiceImpl implements SessionService {
     @Autowired
     private SessionRepository sessionRepository;
 
+    @Autowired
+    private AdviceRepository adviceRepository;
+
     @Override
-    public Page<Session> getAllSessions(Pageable pageable) {
-        return sessionRepository.findAll(pageable);
+    public Page<Session> getAllSessionsByAdviceId(Long adviceId, Pageable pageable) {
+        return sessionRepository.findByAdviceId(adviceId, pageable);
     }
 
     @Override
-    public Session getSessionById(Long sessionId) {
-        return sessionRepository.findById(sessionId)
+    public Session getSessionByIdAndAdviceId(Long adviceId, Long sessionId) {
+        return sessionRepository.findByIdAndAdviceId(sessionId, adviceId)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Session", "Id", sessionId));
+                        "Session not found with Id " + sessionId +
+                                " and AdviceId " + adviceId));
     }
 
     @Override
-    public Session createSession(Session session) {
-        return sessionRepository.save(session);
+    public Session createSession(Long adviceId, Session session) {
+        return adviceRepository.findById(adviceId).map(advice -> {
+            session.setAdvice(advice);
+            return sessionRepository.save(session);
+        }).orElseThrow(() -> new ResourceNotFoundException(
+                "Advice", "Id", adviceId));
     }
 
     @Override
-    public Session updateSession(Long sessionId, Session sessionRequest) {
-        Session session = sessionRepository.findById(sessionId)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Session", "Id", sessionId));
-        return sessionRepository.save(
-                session.setLink(sessionRequest.getLink())
-        );
+    public Session updateSession(Long adviceId, Long sessionId, Session sessionDetails) {
+        if(!adviceRepository.existsById(adviceId))
+            throw new ResourceNotFoundException("Advice", "Id", adviceId);
+
+        return sessionRepository.findById(sessionId).map(session -> {
+            session.setStartAt(sessionDetails.getStartAt());
+            session.setLink(sessionDetails.getLink());
+            return sessionRepository.save(session);
+        }).orElseThrow(() -> new ResourceNotFoundException("Session", "Id", sessionId));
     }
 
     @Override
-    public ResponseEntity<?> deleteSession(Long sessionId) {
-        Session session = sessionRepository.findById(sessionId)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Session", "Id", sessionId));
-        sessionRepository.delete(session);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> deleteSession(Long adviceId, Long sessionId) {
+        return sessionRepository.findByIdAndAdviceId(sessionId, adviceId).map(session -> {
+            sessionRepository.delete(session);
+            return ResponseEntity.ok().build();
+        }).orElseThrow(() -> new ResourceNotFoundException(
+                "Session not found with Id " + sessionId + " and AdviceId " + adviceId));
     }
 }

@@ -1,15 +1,19 @@
 package com.thenews.nutrition.service;
 
 import com.thenews.nutrition.domain.model.Diet;
+import com.thenews.nutrition.domain.repository.AdviceRepository;
 import com.thenews.nutrition.domain.repository.DietRepository;
 import com.thenews.nutrition.domain.service.DietService;
 import com.thenews.common.exception.ResourceNotFoundException;
 import com.thenews.userprofile.domain.repository.NutricionistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class DietServiceImpl implements DietService {
@@ -19,6 +23,9 @@ public class DietServiceImpl implements DietService {
 
     @Autowired
     private NutricionistRepository nutricionistRepository;
+
+    @Autowired
+    private AdviceRepository adviceRepository;
 
     @Override
     public Page<Diet> getAllDietsByNutricionistId(Long nutricionistId, Pageable pageable) {
@@ -31,6 +38,16 @@ public class DietServiceImpl implements DietService {
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Diet not found with Id " + dietId +
                                 " and NutricionistId " + nutricionistId));
+    }
+
+    @Override
+    public Page<Diet> getAllDietsByAdviceId(Long adviceId, Pageable pageable) {
+        return adviceRepository.findById(adviceId).map(advice -> {
+            List<Diet> diets = advice.getDiets();
+            int dietsCount = diets.size();
+            return new PageImpl<>(diets, pageable, dietsCount);
+        }).orElseThrow(() -> new ResourceNotFoundException(
+                "Advice", "Id", adviceId));
     }
 
     @Override

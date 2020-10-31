@@ -14,6 +14,13 @@ public class Nutricionist extends User {
 
     private Short seniorYear;
 
+    private String linkCV;
+
+    private String bank;
+
+    private String accountNumber;
+
+
     public String getUniversity() {
         return university;
     }
@@ -29,6 +36,33 @@ public class Nutricionist extends User {
 
     public Nutricionist setSeniorYear(Short seniorYear) {
         this.seniorYear = seniorYear;
+        return this;
+    }
+
+    public String getLinkCV() {
+        return linkCV;
+    }
+
+    public Nutricionist setLinkCV(String linkCV) {
+        this.linkCV = linkCV;
+        return this;
+    }
+
+    public String getBank() {
+        return bank;
+    }
+
+    public Nutricionist setBank(String bank) {
+        this.bank = bank;
+        return this;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public Nutricionist setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
         return this;
     }
 }
