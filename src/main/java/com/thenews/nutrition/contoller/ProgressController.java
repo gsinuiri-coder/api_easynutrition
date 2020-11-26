@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 @Tag(name="Progress", description = "Progress API")
 @RestController
 @RequestMapping("/api")
+@CrossOrigin
 public class ProgressController {
 
     @Autowired

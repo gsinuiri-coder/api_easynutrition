@@ -45,45 +45,6 @@ public class AdviceServiceImplIntegrationTest {
     @Test
     @DisplayName("When createAdvice With Invalid Customer Then Throws ResourceNotFoundException")
     public void whenCreateAdviceWithInvalidCustomerThenThrowsResourceNotFoundException(){
-        // Arrange
 
-        Customer customer = new Customer();
-        customer.setId(1L);
-        customer.setUserName("cus1");
-        customer.setPassword("cpass1");
-        customer.setName("custoemer1");
-        customer.setLastName("cls1");
-
-        Nutricionist nutricionist = new Nutricionist();
-        nutricionist.setId(2L);
-        nutricionist.setUserName("nus1");
-        nutricionist.setPassword("npass1");
-        nutricionist.setName("nutrionist1");
-        nutricionist.setLastName("nls1");
-
-        String template = "Resource %s not found for %s with value %s";
-
-        Mockito.when(customerRepository.save(customer))
-            .thenReturn(customer);
-        Mockito.when(nutricionistRepository.save(nutricionist))
-            .thenReturn(nutricionist);
-
-        Long customerId = 1L;
-        Long nutricionistId = 2L;
-
-        Advice advice = new Advice();
-        advice.setActive(true);
-
-        String expectedMessage = String.format(template, "Customer", "Id", 1L);
-
-        // Act
-        Throwable exception = catchThrowable(() -> {
-            Advice createAdvice = adviceService.createAdvice(customerId, nutricionistId, advice);
-        });
-
-        // Assert
-        assertThat(exception)
-                .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessage(expectedMessage);
     }
 }

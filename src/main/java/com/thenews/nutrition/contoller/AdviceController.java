@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 @Tag(name="Advices", description = "Advices API")
 @RestController
 @RequestMapping("/api")
+@CrossOrigin
 public class AdviceController {
 
     @Autowired
@@ -52,7 +53,7 @@ public class AdviceController {
 //        return convertToResource(adviceService.getAdviceById(adviceId));
 //    }
 
-    @PostMapping("/customers/{customerId}/nutricionists/{nutricionistId}/advices")
+    @PostMapping("/advices/customers/{customerId}/nutricionists/{nutricionistId}")
     public AdviceResource createAdvice(
             @PathVariable(value = "customerId") Long customerId,
             @PathVariable(value = "nutricionistId") Long nutricionistId,

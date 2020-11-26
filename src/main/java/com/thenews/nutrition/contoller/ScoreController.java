@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 @Tag(name="Scores", description = "Scores API")
 @RestController
 @RequestMapping("/api")
+@CrossOrigin
 public class ScoreController {
 
     @Autowired

@@ -1,5 +1,6 @@
 package com.thenews.nutrition.resource;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 
 public class SaveAdviceResource {

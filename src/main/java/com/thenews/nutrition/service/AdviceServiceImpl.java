@@ -52,7 +52,7 @@ public class AdviceServiceImpl implements AdviceService {
         Customer customerTemp = customerRepository.findById(customerId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Customer", "Id", customerId));
-        
+
         if (customerTemp != null){
             advice.setCustomer(customerTemp);
             Nutricionist nutricionistTemp = nutricionistRepository.findById(nutricionistId)
@@ -65,6 +65,9 @@ public class AdviceServiceImpl implements AdviceService {
         }
         return null;
     }
+
+//    @Override
+//    public Advice createAdvice(Advice advice) { return adviceRepository.save(advice); }
 
 //    @Override
 //    public Advice updateAdvice(Long adviceId, Advice adviceRequest) {
