@@ -16,6 +16,8 @@ public interface AdviceService {
 //    Advice getAdviceByIdAndCustomerId(Long customerId, Long commentId);
     Advice createAdvice(Long customerId, Long nutricionistId, Advice advice);
 
+//    Advice createAdvice(Advice advice);
+
 //    Advice updateAdvice(Long customerId, Long commentId, Advice commentDetails);
 //    ResponseEntity<?> deleteAdvice(Long customerId, Long commentId);
 

@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 @Tag(name="Diets", description = "Diets API")
 @RestController
 @RequestMapping("/api")
+@CrossOrigin
 public class DietController {
 
     @Autowired
