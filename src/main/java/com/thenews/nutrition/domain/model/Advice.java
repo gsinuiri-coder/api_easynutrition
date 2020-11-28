@@ -28,11 +28,6 @@ public class Advice extends AuditModel {
     @JsonIgnore
     private Customer customer;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "nutricionist_id", nullable = false)
-    @JsonIgnore
-    private Nutricionist nutricionist;
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "score_id", referencedColumnName = "id")
     @JsonIgnore
@@ -106,15 +101,6 @@ public class Advice extends AuditModel {
 
     public Advice setCustomer(Customer customer) {
         this.customer = customer;
-        return this;
-    }
-
-    public Nutricionist getNutricionist() {
-        return nutricionist;
-    }
-
-    public Advice setNutricionist(Nutricionist nutricionist) {
-        this.nutricionist = nutricionist;
         return this;
     }
 }

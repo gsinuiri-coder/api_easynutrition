@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SessionServiceImpl implements SessionService {
 
@@ -21,8 +23,8 @@ public class SessionServiceImpl implements SessionService {
     private AdviceRepository adviceRepository;
 
     @Override
-    public Page<Session> getAllSessionsByAdviceId(Long adviceId, Pageable pageable) {
-        return sessionRepository.findByAdviceId(adviceId, pageable);
+    public List<Session> getAllSessionsByAdviceId(Long adviceId) {
+        return sessionRepository.findByAdviceId(adviceId);
     }
 
     @Override

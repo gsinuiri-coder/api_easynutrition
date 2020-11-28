@@ -8,7 +8,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
+import java.util.List;
 
 @Entity
 @Table(name="specialties")
@@ -16,18 +16,17 @@ public class Specialty extends AuditModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Long id;
+    private Long id;
 
     @NotNull
     @Size(max = 100)
-    protected String name;
+    private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "nutricionist_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            mappedBy = "specialties")
     @JsonIgnore
-    private Nutricionist nutricionist;
-
+    private List<Nutricionist> nutricionists;
 
     public Long getId() {
         return id;
@@ -47,12 +46,12 @@ public class Specialty extends AuditModel {
         return this;
     }
 
-    public Nutricionist getNutricionist() {
-        return nutricionist;
+    public List<Nutricionist> getNutricionists() {
+        return nutricionists;
     }
 
-    public Specialty setNutricionist(Nutricionist nutricionist) {
-        this.nutricionist = nutricionist;
+    public Specialty setNutricionists(List<Nutricionist> nutricionists) {
+        this.nutricionists = nutricionists;
         return this;
     }
 }

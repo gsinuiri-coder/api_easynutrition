@@ -20,10 +20,10 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CrossOrigin
 @Tag(name="Diets", description = "Diets API")
 @RestController
 @RequestMapping("/api")
-@CrossOrigin
 public class DietController {
 
     @Autowired
@@ -39,17 +39,14 @@ public class DietController {
                     content = @Content(mediaType = "application/json"))
     })
     @GetMapping("/nutricionists/{nutricionistId}/diets")
-    public Page<DietResource> getAllDietsByPostId(
-            @PathVariable (value = "nutricionistId") Long nutricionistId,
-            Pageable pageable) {
-        Page<Diet> dietPage = dietService.getAllDietsByNutricionistId(nutricionistId, pageable);
-        List<DietResource> resources = dietPage.getContent().stream()
-                .map(this::convertToResource).collect(Collectors.toList());
-        return new PageImpl<>(resources, pageable, resources.size());
+    public List<DietResource> getAllDietsByNutricionistId(@PathVariable (value = "nutricionistId") Long nutricionistId) {
+        return  dietService.getAllDietsByNutricionistId(nutricionistId)
+                .stream().map(this::convertToResource)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/nutricionists/{nutricionistId}/diets/{dietId}")
-    public DietResource getDietByIdAndPostId(
+    public DietResource getDietByIdAndNutricionistId(
             @PathVariable(name = "nutricionistId") Long nutricionistId,
             @PathVariable(name = "dietId") Long dietId) {
         return convertToResource(dietService.getDietByIdAndNutricionistId(nutricionistId, dietId));
@@ -82,7 +79,6 @@ public class DietController {
     private Diet convertToEntity(SaveDietResource resource) {
         return mapper.map(resource, Diet.class);
     }
-
     private DietResource convertToResource(Diet entity) {
         return mapper.map(entity, DietResource.class);
     }

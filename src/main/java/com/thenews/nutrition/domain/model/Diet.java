@@ -13,12 +13,10 @@ import java.util.List;
 @Entity
 @Table(name="diets")
 public class Diet extends AuditModel {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
     @NotNull
     private String title;
 
@@ -37,7 +35,6 @@ public class Diet extends AuditModel {
             mappedBy = "diets")
     @JsonIgnore
     private List<Advice> advices;
-
 
     public Long getId() {
         return id;

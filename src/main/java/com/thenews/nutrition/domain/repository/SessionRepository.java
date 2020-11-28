@@ -5,9 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface SessionRepository extends JpaRepository<Session, Long> {
-    Page<Session> findByAdviceId(Long adviceId, Pageable pageable);
+    List<Session> findByAdviceId(Long adviceId);
     Optional<Session> findByIdAndAdviceId(Long id, Long adviceId);
 }

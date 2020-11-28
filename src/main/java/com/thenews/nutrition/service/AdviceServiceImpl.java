@@ -26,67 +26,52 @@ public class AdviceServiceImpl implements AdviceService {
     private AdviceRepository adviceRepository;
 
     @Autowired
-    private DietRepository dietRepository;
-
-    @Autowired
     private CustomerRepository customerRepository;
 
     @Autowired
-    private NutricionistRepository nutricionistRepository;
-
-//    @Override
-//    public Page<Advice> getAllAdvices(Pageable pageable) {
-//        return adviceRepository.findAll(pageable);
-//    }
-//
-//    @Override
-//    public Advice getAdviceById(Long adviceId) {
-//        return adviceRepository.findById(adviceId)
-//                .orElseThrow(() -> new ResourceNotFoundException(
-//                        "Advice", "Id", adviceId));
-//    }
+    private DietRepository dietRepository;
 
     @Override
-    public Advice createAdvice(Long customerId, Long nutricionistId, Advice advice) {
-
-        Customer customerTemp = customerRepository.findById(customerId)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Customer", "Id", customerId));
-
-        if (customerTemp != null){
-            advice.setCustomer(customerTemp);
-            Nutricionist nutricionistTemp = nutricionistRepository.findById(nutricionistId)
-                    .orElseThrow(() -> new ResourceNotFoundException(
-                            "Nutricionist", "Id", nutricionistId));
-            if (nutricionistTemp != null){
-                advice.setNutricionist(nutricionistTemp);
-                return adviceRepository.save(advice);
-            }
-        }
-        return null;
+    public List<Advice> getAllAdvicesByCustomerId(Long customerId) {
+        return adviceRepository.findByCustomerId(customerId);
     }
 
-//    @Override
-//    public Advice createAdvice(Advice advice) { return adviceRepository.save(advice); }
+    @Override
+    public Advice getAdviceByIdAndCustomerId(Long customerId, Long adviceId) {
+        return adviceRepository.findByIdAndCustomerId(adviceId, customerId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Advice not found with Id " + adviceId +
+                                " and CustomerId " + customerId));
+    }
 
-//    @Override
-//    public Advice updateAdvice(Long adviceId, Advice adviceRequest) {
-//        Advice advice = adviceRepository.findById(adviceId)
-//                .orElseThrow(() -> new ResourceNotFoundException(
-//                        "Advice", "Id", adviceId));
-//        return adviceRepository.save(
-//                advice.setActive(adviceRequest.isActive())
-//        );
-//    }
-//
-//    @Override
-//    public ResponseEntity<?> deleteAdvice(Long adviceId) {
-//        Advice advice = adviceRepository.findById(adviceId)
-//                .orElseThrow(() -> new ResourceNotFoundException(
-//                        "Advice", "Id", adviceId));
-//        adviceRepository.delete(advice);
-//        return ResponseEntity.ok().build();
-//    }
+    @Override
+    public Advice createAdvice(Long customerId, Advice advice) {
+        return customerRepository.findById(customerId).map(customer -> {
+            advice.setCustomer(customer);
+            return adviceRepository.save(advice);
+        }).orElseThrow(() -> new ResourceNotFoundException(
+                "Customer", "Id", customerId));
+    }
+
+    @Override
+    public Advice updateAdvice(Long customerId, Long adviceId, Advice adviceDetails) {
+        if(!customerRepository.existsById(customerId))
+            throw new ResourceNotFoundException("Customer", "Id", customerId);
+
+        return adviceRepository.findById(adviceId).map(advice -> {
+            advice.setActive(adviceDetails.isActive());
+            return adviceRepository.save(advice);
+        }).orElseThrow(() -> new ResourceNotFoundException("Advice", "Id", adviceId));
+    }
+
+    @Override
+    public ResponseEntity<?> deleteAdvice(Long customerId, Long adviceId) {
+        return adviceRepository.findByIdAndCustomerId(adviceId, customerId).map(advice -> {
+            adviceRepository.delete(advice);
+            return ResponseEntity.ok().build();
+        }).orElseThrow(() -> new ResourceNotFoundException(
+                "Advice not found with Id " + adviceId + " and CustomerId " + customerId));
+    }
 
     @Override
     public Advice assignAdviceDiet(Long adviceId, Long dietId) {
@@ -112,12 +97,8 @@ public class AdviceServiceImpl implements AdviceService {
     }
 
     @Override
-    public Page<Advice> getAllAdvicesByDietId(Long dietId, Pageable pageable) {
-        return dietRepository.findById(dietId).map( diet -> {
-            List<Advice> advices = diet.getAdvices();
-            int advicesCount = advices.size();
-            return new PageImpl<>(advices, pageable, advicesCount);
-        }).orElseThrow(() -> new ResourceNotFoundException(
-                "Diet", "Id", dietId));
+    public List<Advice> getAllAdvicesByDietId(Long dietId) {
+        return dietRepository.findById(dietId).map(Diet::getAdvices)
+                .orElseThrow(() -> new ResourceNotFoundException("Diet", "Id", dietId));
     }
 }

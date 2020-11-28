@@ -20,6 +20,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CrossOrigin
 @Tag(name="Customers", description = "Customer API")
 @RestController
 @RequestMapping("/api")
@@ -38,13 +39,10 @@ public class CustomerController {
                     content = @Content(mediaType = "application/json"))
     })
     @GetMapping("/customers")
-    public Page<CustomerResource> getAllCustomers(Pageable pageable) {
-
-        Page<Customer> customersPage = customerService.getAllCustomers(pageable);
-        List<CustomerResource> resources = customersPage.getContent()
+    public List<CustomerResource> getAllCustomers() {
+        return customerService.getAllCustomers()
                 .stream().map(this::convertToResource)
                 .collect(Collectors.toList());
-        return new PageImpl<>(resources, pageable, resources.size());
     }
 
     @GetMapping("/customers/{customerId}")

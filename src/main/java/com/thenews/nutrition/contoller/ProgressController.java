@@ -24,10 +24,10 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CrossOrigin
 @Tag(name="Progress", description = "Progress API")
 @RestController
 @RequestMapping("/api")
-@CrossOrigin
 public class ProgressController {
 
     @Autowired
@@ -43,13 +43,10 @@ public class ProgressController {
                     content = @Content(mediaType = "application/json"))
     })
     @GetMapping("/advices/{adviceId}/progresss")
-    public Page<ProgressResource> getAllProgresssByAdviceId(
-            @PathVariable (value = "adviceId") Long adviceId,
-            Pageable pageable) {
-        Page<Progress> progressPage = progressService.getAllProgresssByAdviceId(adviceId, pageable);
-        List<ProgressResource> resources = progressPage.getContent().stream()
-                .map(this::convertToResource).collect(Collectors.toList());
-        return new PageImpl<>(resources, pageable, resources.size());
+    public List<ProgressResource> getAllProgresssByAdviceId(@PathVariable (value = "adviceId") Long adviceId) {
+        return progressService.getAllProgresssByAdviceId(adviceId)
+                .stream().map(this::convertToResource)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/advices/{adviceId}/progresss/{progressId}")
@@ -86,7 +83,6 @@ public class ProgressController {
     private Progress convertToEntity(SaveProgressResource resource) {
         return mapper.map(resource, Progress.class);
     }
-
     private ProgressResource convertToResource(Progress entity) {
         return mapper.map(entity, ProgressResource.class);
     }

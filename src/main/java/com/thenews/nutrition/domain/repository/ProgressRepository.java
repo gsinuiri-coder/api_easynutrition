@@ -5,9 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ProgressRepository extends JpaRepository<Progress, Long> {
-    Page<Progress> findByAdviceId(Long adviceId, Pageable pageable);
+    List<Progress> findByAdviceId(Long adviceId);
     Optional<Progress> findByIdAndAdviceId(Long id, Long adviceId);
 }

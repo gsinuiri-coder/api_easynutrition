@@ -1,5 +1,6 @@
 package com.thenews.nutrition.service;
 
+import com.thenews.nutrition.domain.model.Advice;
 import com.thenews.nutrition.domain.model.Diet;
 import com.thenews.nutrition.domain.repository.AdviceRepository;
 import com.thenews.nutrition.domain.repository.DietRepository;
@@ -7,9 +8,6 @@ import com.thenews.nutrition.domain.service.DietService;
 import com.thenews.common.exception.ResourceNotFoundException;
 import com.thenews.userprofile.domain.repository.NutricionistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -28,8 +26,8 @@ public class DietServiceImpl implements DietService {
     private AdviceRepository adviceRepository;
 
     @Override
-    public Page<Diet> getAllDietsByNutricionistId(Long nutricionistId, Pageable pageable) {
-        return dietRepository.findByNutricionistId(nutricionistId, pageable);
+    public List<Diet> getAllDietsByNutricionistId(Long nutricionistId) {
+        return dietRepository.findByNutricionistId(nutricionistId);
     }
 
     @Override
@@ -41,13 +39,9 @@ public class DietServiceImpl implements DietService {
     }
 
     @Override
-    public Page<Diet> getAllDietsByAdviceId(Long adviceId, Pageable pageable) {
-        return adviceRepository.findById(adviceId).map(advice -> {
-            List<Diet> diets = advice.getDiets();
-            int dietsCount = diets.size();
-            return new PageImpl<>(diets, pageable, dietsCount);
-        }).orElseThrow(() -> new ResourceNotFoundException(
-                "Advice", "Id", adviceId));
+    public List<Diet> getAllDietsByAdviceId(Long adviceId) {
+        return adviceRepository.findById(adviceId).map(Advice::getDiets)
+                .orElseThrow(() -> new ResourceNotFoundException("Advice", "Id", adviceId));
     }
 
     @Override

@@ -20,68 +20,60 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CrossOrigin
 @Tag(name="Advices", description = "Advices API")
 @RestController
 @RequestMapping("/api")
-@CrossOrigin
 public class AdviceController {
-
-    @Autowired
-    private ModelMapper mapper;
 
     @Autowired
     private AdviceService adviceService;
 
-//    @Operation(summary = "Get All Advices", description = "Get All available Advices", responses = {
-//            @ApiResponse(
-//                    description = "All Advices",
-//                    responseCode = "200",
-//                    content = @Content(mediaType = "application/json"))
-//    })
-//    @GetMapping("/advices")
-//    public Page<AdviceResource> getAllAdvices(Pageable pageable) {
-//
-//        Page<Advice> advicesPage = adviceService.getAllAdvices(pageable);
-//        List<AdviceResource> resources = advicesPage.getContent()
-//                .stream().map(this::convertToResource)
-//                .collect(Collectors.toList());
-//        return new PageImpl<>(resources, pageable, resources.size());
-//    }
-//
-//    @GetMapping("/advices/{adviceId}")
-//    public AdviceResource getAdviceById(@PathVariable(value = "adviceId") Long adviceId) {
-//        return convertToResource(adviceService.getAdviceById(adviceId));
-//    }
+    @Autowired
+    private ModelMapper mapper;
 
-    @PostMapping("/advices/customers/{customerId}/nutricionists/{nutricionistId}")
-    public AdviceResource createAdvice(
-            @PathVariable(value = "customerId") Long customerId,
-            @PathVariable(value = "nutricionistId") Long nutricionistId,
-            @Valid @RequestBody SaveAdviceResource resource) {
-        Advice advice = convertToEntity(resource);
-        return convertToResource(adviceService.createAdvice(customerId, nutricionistId, advice));
+    @GetMapping("/customers/{customerId}/advices")
+    public List<AdviceResource> getAllAdvicesByCustomerId(@PathVariable (value = "customerId") Long customerId) {
+        return adviceService.getAllAdvicesByCustomerId(customerId)
+                .stream().map(this::convertToResource)
+                .collect(Collectors.toList());
     }
 
-//    @PutMapping("/advices/{adviceId}")
-//    public AdviceResource updateAdvice(@PathVariable Long adviceId,
-//                                   @Valid @RequestBody SaveAdviceResource resource) {
-//        Advice advice = convertToEntity(resource);
-//        return convertToResource(
-//                adviceService.updateAdvice(adviceId, advice));
-//    }
-//
-//    @DeleteMapping("/advices/{adviceId}")
-//    public ResponseEntity<?> deleteAdvice(@PathVariable Long adviceId) {
-//        return adviceService.deleteAdvice(adviceId);
-//    }
-//
+    @GetMapping("/customers/{customerId}/advices/{adviceId}")
+    public AdviceResource getAdviceByIdAndCustomerId(
+            @PathVariable(name = "customerId") Long customerId,
+            @PathVariable(name = "adviceId") Long adviceId) {
+        return convertToResource(adviceService.getAdviceByIdAndCustomerId(customerId, adviceId));
+    }
+
+    @PostMapping("/customers/{customerId}/advices")
+    public AdviceResource createAdvice(
+            @PathVariable(value = "customerId") Long customerId,
+            @Valid @RequestBody SaveAdviceResource resource) {
+        return convertToResource(adviceService.createAdvice(customerId,
+                convertToEntity(resource)));
+    }
+
+    @PutMapping("/customers/{customerId}/advices/{adviceId}")
+    public AdviceResource updateAdvice(
+            @PathVariable (value = "customerId") Long customerId,
+            @PathVariable (value = "adviceId") Long adviceId,
+            @Valid @RequestBody SaveAdviceResource resource) {
+        return convertToResource(adviceService.updateAdvice(customerId, adviceId,
+                convertToEntity(resource)));
+    }
+
+    @DeleteMapping("/customers/{customerId}/advices/{adviceId}")
+    public ResponseEntity<?> deleteAdvice(
+            @PathVariable (value = "customerId") Long customerId,
+            @PathVariable (value = "adviceId") Long adviceId) {
+        return adviceService.deleteAdvice(customerId, adviceId);
+    }
 
     private Advice convertToEntity(SaveAdviceResource resource) {
         return mapper.map(resource, Advice.class);
     }
-
     private AdviceResource convertToResource(Advice entity) {
         return mapper.map(entity, AdviceResource.class);
     }
-
 }

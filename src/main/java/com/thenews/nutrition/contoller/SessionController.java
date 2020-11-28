@@ -20,10 +20,10 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CrossOrigin
 @Tag(name="Sessions", description = "Sessions API")
 @RestController
 @RequestMapping("/api")
-@CrossOrigin
 public class SessionController {
 
     @Autowired
@@ -39,13 +39,10 @@ public class SessionController {
                     content = @Content(mediaType = "application/json"))
     })
     @GetMapping("/advices/{adviceId}/sessions")
-    public Page<SessionResource> getAllSessionsByAdviceId(
-            @PathVariable (value = "adviceId") Long adviceId,
-            Pageable pageable) {
-        Page<Session> sessionPage = sessionService.getAllSessionsByAdviceId(adviceId, pageable);
-        List<SessionResource> resources = sessionPage.getContent().stream()
-                .map(this::convertToResource).collect(Collectors.toList());
-        return new PageImpl<>(resources, pageable, resources.size());
+    public List<SessionResource> getAllSessionsByAdviceId(@PathVariable (value = "adviceId") Long adviceId) {
+        return sessionService.getAllSessionsByAdviceId(adviceId)
+                .stream().map(this::convertToResource)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/advices/{adviceId}/sessions/{sessionId}")
@@ -82,7 +79,6 @@ public class SessionController {
     private Session convertToEntity(SaveSessionResource resource) {
         return mapper.map(resource, Session.class);
     }
-
     private SessionResource convertToResource(Session entity) {
         return mapper.map(entity, SessionResource.class);
     }

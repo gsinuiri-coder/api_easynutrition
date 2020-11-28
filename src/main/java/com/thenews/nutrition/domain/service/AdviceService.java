@@ -5,27 +5,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 public interface AdviceService {
-//    Page<Advice> getAllAdvices(Pageable pageable);
-//    Advice getAdviceById(Long adviceId);
-//    Advice createAdvice(Advice advice);
-//    Advice updateAdvice(Long adviceId, Advice adviceRequest);
-//    ResponseEntity<?> deleteAdvice(Long adviceId);
 
-//    Page<Advice> getAllAdvicesByCustomerId(Long customerId, Pageable pageable);
-//    Advice getAdviceByIdAndCustomerId(Long customerId, Long commentId);
-    Advice createAdvice(Long customerId, Long nutricionistId, Advice advice);
-
-//    Advice createAdvice(Advice advice);
-
-//    Advice updateAdvice(Long customerId, Long commentId, Advice commentDetails);
-//    ResponseEntity<?> deleteAdvice(Long customerId, Long commentId);
+    List<Advice> getAllAdvicesByCustomerId(Long customerId);
+    Advice getAdviceByIdAndCustomerId(Long customerId, Long adviceId);
+    Advice createAdvice(Long customerId, Advice advice);
+    Advice updateAdvice(Long customerId, Long adviceId, Advice adviceDetails);
+    ResponseEntity<?> deleteAdvice(Long customerId, Long adviceId);
 
     Advice assignAdviceDiet(Long adviceId, Long dietId);
     Advice unassignAdviceDiet(Long adviceId, Long dietId);
-    Page<Advice> getAllAdvicesByDietId(Long dietId, Pageable pageable);
-//    Advice getAdviceByTitle(String title);
-
-
-
+    List<Advice> getAllAdvicesByDietId(Long dietId);
 }

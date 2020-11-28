@@ -5,9 +5,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 public interface ProgressService {
 
-    Page<Progress> getAllProgresssByAdviceId(Long adviceId, Pageable pageable);
+    List<Progress> getAllProgresssByAdviceId(Long adviceId);
     Progress getProgressByIdAndAdviceId(Long adviceId, Long progressId);
     Progress createProgress(Long adviceId, Progress progress);
     Progress updateProgress(Long adviceId, Long progressId, Progress progressDetails);

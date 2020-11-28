@@ -20,10 +20,10 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CrossOrigin
 @Tag(name="Scores", description = "Scores API")
 @RestController
 @RequestMapping("/api")
-@CrossOrigin
 public class ScoreController {
 
     @Autowired
@@ -31,29 +31,6 @@ public class ScoreController {
 
     @Autowired
     private ModelMapper mapper;
-
-//    @Operation(summary = "Get All Scores", description = "Get All available Scores", responses = {
-//            @ApiResponse(
-//                    description = "All Scores",
-//                    responseCode = "200",
-//                    content = @Content(mediaType = "application/json"))
-//    })
-//    @GetMapping("/advices/{adviceId}/scores")
-//    public Page<ScoreResource> getAllScoresByAdviceId(
-//            @PathVariable(value = "adviceId") Long adviceId,
-//            Pageable pageable) {
-//        Page<Score> scorePage = scoreService.getAllScoresByAdviceId(adviceId, pageable);
-//        List<ScoreResource> resources = scorePage.getContent().stream()
-//                .map(this::convertToResource).collect(Collectors.toList());
-//        return new PageImpl<>(resources, pageable, resources.size());
-//    }
-//
-//    @GetMapping("/advices/{adviceId}/scores/{scoreId}")
-//    public ScoreResource getScoreByIdAndAdviceId(
-//            @PathVariable(name = "adviceId") Long adviceId,
-//            @PathVariable(name = "scoreId") Long scoreId) {
-//        return convertToResource(scoreService.getScoreByIdAndAdviceId(adviceId, scoreId));
-//    }
 
     @Operation(summary = "Get Score", description = "Get a Score", responses = {@ApiResponse(
             description = "Get Score",
@@ -93,7 +70,6 @@ public class ScoreController {
     private Score convertToEntity(SaveScoreResource resource) {
         return mapper.map(resource, Score.class);
     }
-
     private ScoreResource convertToResource(Score entity) {
         return mapper.map(entity, ScoreResource.class);
     }

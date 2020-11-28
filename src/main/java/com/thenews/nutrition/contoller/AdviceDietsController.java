@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CrossOrigin
 @Tag(name = "AdviceDiets", description = "AdviceDiets API")
 @RestController
 @RequestMapping("/api")
-@CrossOrigin
 public class AdviceDietsController {
 
     @Autowired
@@ -50,14 +50,10 @@ public class AdviceDietsController {
     }
 
     @GetMapping("/advices/{adviceId}/diets")
-    public Page<DietResource> getAllDietsByAdviceId(
-            @PathVariable(name = "adviceId") Long adviceId,
-            Pageable pageable) {
-        List<DietResource> diets = dietService.getAllDietsByAdviceId(adviceId,pageable)
-                .getContent().stream().map(this::convertToResource)
+    public List<DietResource> getAllDietsByAdviceId(@PathVariable(name = "adviceId") Long adviceId) {
+        return dietService.getAllDietsByAdviceId(adviceId)
+                .stream().map(this::convertToResource)
                 .collect(Collectors.toList());
-        int dietsCount = diets.size();
-        return new PageImpl<>(diets, pageable, dietsCount);
     }
 
     private Diet convertToEntity(SaveDietResource resource) {
@@ -73,5 +69,4 @@ public class AdviceDietsController {
     private AdviceResource convertToResource(Advice entity) {
         return mapper.map(entity, AdviceResource.class);
     }
-    
 }

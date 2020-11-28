@@ -5,10 +5,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 public interface SpecialtyService {
-    Page<Specialty> getAllSpecialtiesByNutricionistId(Long nutricionistId, Pageable pageable);
-    Specialty getSpecialtyByIdAndNutricionistId(Long nutricionistId, Long specialtyId);
-    Specialty createSpecialty(Long nutricionistId, Specialty specialty);
-    Specialty updateSpecialty(Long nutricionistId, Long specialtyId, Specialty specialtyDetails);
-    ResponseEntity<?> deleteSpecialty(Long nutricionistId, Long specialtyId);
+    List<Specialty> getAllSpecialties();
+    List<Specialty> getAllSpecialtiesByNutricionistId(Long nutricionistId);
+    Specialty getSpecialtyById(Long specialtyId);
+    Specialty createSpecialty(Specialty specialty);
+    Specialty updateSpecialty(Long specialtyId, Specialty specialtyDetails);
+    ResponseEntity<?> deleteSpecialty(Long specialtyId);
 }

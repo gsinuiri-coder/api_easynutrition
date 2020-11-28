@@ -21,6 +21,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CrossOrigin
 @Tag(name="Nutricionists", description = "Nutricionist API")
 @RestController
 @RequestMapping("/api")
@@ -39,13 +40,10 @@ public class NutricionistController {
                     content = @Content(mediaType = "application/json"))
     })
     @GetMapping("/nutricionists")
-    public Page<NutricionistResource> getAllNutricionists(Pageable pageable) {
-
-        Page<Nutricionist> nutricionistsPage = nutricionistService.getAllNutricionists(pageable);
-        List<NutricionistResource> resources = nutricionistsPage.getContent()
+    public List<NutricionistResource> getAllNutricionists() {
+        return nutricionistService.getAllNutricionists()
                 .stream().map(this::convertToResource)
                 .collect(Collectors.toList());
-        return new PageImpl<>(resources, pageable, resources.size());
     }
 
     @GetMapping("/nutricionists/{nutricionistId}")
@@ -78,7 +76,6 @@ public class NutricionistController {
     private Nutricionist convertToEntity(SaveNutricionistResource resource) {
         return mapper.map(resource, Nutricionist.class);
     }
-
     private NutricionistResource convertToResource(Nutricionist entity) {
         return mapper.map(entity, NutricionistResource.class);
     }

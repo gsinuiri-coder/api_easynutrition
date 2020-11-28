@@ -5,9 +5,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 public interface CustomerService {
 
-    Page<Customer> getAllCustomers(Pageable pageable);
+    List<Customer> getAllCustomers();
     Customer getCustomerById(Long customerId);
 
     Customer createCustomer(Customer customer);

@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProgressServiceImpl implements ProgressService {
 
@@ -21,8 +23,8 @@ public class ProgressServiceImpl implements ProgressService {
     private AdviceRepository adviceRepository;
 
     @Override
-    public Page<Progress> getAllProgresssByAdviceId(Long adviceId, Pageable pageable) {
-        return sessionRepository.findByAdviceId(adviceId, pageable);
+    public List<Progress> getAllProgresssByAdviceId(Long adviceId) {
+        return sessionRepository.findByAdviceId(adviceId);
     }
 
     @Override

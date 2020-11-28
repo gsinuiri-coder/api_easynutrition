@@ -5,8 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 public interface UserService {
-    Page<User> getAllUsers(Pageable pageable);
+    List<User> getAllUsers();
     User getUserById(Long userId);
 
     User createUser(User user);

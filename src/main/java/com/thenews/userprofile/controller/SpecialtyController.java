@@ -20,17 +20,18 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
-
+@CrossOrigin
 @Tag(name = "Specialties", description = "Specialties API")
 @RestController
 @RequestMapping("/api")
 public class SpecialtyController {
-    @Autowired
-    private SpecialtyService specialtyService;
 
     @Autowired
     private ModelMapper mapper;
+
+    @Autowired
+    private SpecialtyService specialtyService;
+
 
     @Operation(summary = "Get All Specialties", description = "Get All available Specialties", responses = {
             @ApiResponse(
@@ -38,51 +39,37 @@ public class SpecialtyController {
                     responseCode = "200",
                     content = @Content(mediaType = "application/json"))
     })
-    @GetMapping("/nutricionists/{nutricionistId}/specialties")
-    public Page<SpecialtyResource> getAllSpecialtiesByNutricionistId(
-            @PathVariable(value = "nutricionistId") Long nutricionistId,
-            Pageable pageable) {
-        Page<Specialty> specialtyPage = specialtyService.getAllSpecialtiesByNutricionistId(nutricionistId, pageable);
-        List<SpecialtyResource> resources = specialtyPage.getContent().stream()
-                .map(this::convertToResource).collect(Collectors.toList());
-        return new PageImpl<>(resources, pageable, resources.size());
+    @GetMapping("/specialties")
+    public List<SpecialtyResource> getAllSpecialties(){
+        return specialtyService.getAllSpecialties()
+                .stream().map(this::convertToResource)
+                .collect(Collectors.toList());
     }
 
-    @GetMapping("/nutricionists/{nutricionistId}/specialties/{specialtyId}")
-    public SpecialtyResource getSpecialtyByIdAndNutricionistId(
-            @PathVariable(name = "nutricionistId") Long nutricionistId,
-            @PathVariable(name = "specialtyId") Long specialtyId) {
-        return convertToResource(specialtyService.getSpecialtyByIdAndNutricionistId(nutricionistId, specialtyId));
+    @GetMapping("/specialties/{id}")
+    public SpecialtyResource getSpecialtyById(@PathVariable(name = "id") Long specialtyId) {
+        return convertToResource(specialtyService.getSpecialtyById(specialtyId));
     }
 
-    @PostMapping("/nutricionists/{nutricionistId}/specialties")
-    public SpecialtyResource createSpecialty(
-            @PathVariable(value = "nutricionistId") Long nutricionistId,
-            @Valid @RequestBody SaveSpecialtyResource resource) {
-        return convertToResource(specialtyService.createSpecialty(nutricionistId,
-                convertToEntity(resource)));
+    @PostMapping("/specialties")
+    public SpecialtyResource createSpecialty(@Valid @RequestBody SaveSpecialtyResource resource) {
+        return convertToResource(specialtyService.createSpecialty(convertToEntity(resource)));
     }
 
-    @PutMapping("/nutricionists/{nutricionistId}/specialties/{specialtyId}")
-    public SpecialtyResource updateSpecialty(
-            @PathVariable (value = "nutricionistId") Long nutricionistId,
-            @PathVariable (value = "specialtyId") Long specialtyId,
-            @Valid @RequestBody SaveSpecialtyResource resource) {
-        return convertToResource(specialtyService.updateSpecialty(nutricionistId, specialtyId,
-                convertToEntity(resource)));
+    @PutMapping("/specialties/{id}")
+    public SpecialtyResource updateSpecialty(@PathVariable(name = "id") Long specialtyId,
+                                 SaveSpecialtyResource resource) {
+        return convertToResource(specialtyService.updateSpecialty(specialtyId, convertToEntity(resource)));
     }
 
-    @DeleteMapping("/nutricionists/{nutricionistId}/specialties/{specialtyId}")
-    public ResponseEntity<?> deleteSpecialty(
-            @PathVariable (value = "nutricionistId") Long nutricionistId,
-            @PathVariable (value = "specialtyId") Long specialtyId) {
-        return specialtyService.deleteSpecialty(nutricionistId, specialtyId);
+    @DeleteMapping("/specialties/{id}")
+    public ResponseEntity<?> deleteSpecialty(@PathVariable(name = "id") Long specialtyId) {
+        return specialtyService.deleteSpecialty(specialtyId);
     }
 
     private Specialty convertToEntity(SaveSpecialtyResource resource) {
         return mapper.map(resource, Specialty.class);
     }
-
     private SpecialtyResource convertToResource(Specialty entity) {
         return mapper.map(entity, SpecialtyResource.class);
     }
